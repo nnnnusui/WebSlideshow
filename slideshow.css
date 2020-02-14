@@ -42,7 +42,13 @@ html, body {
     overflow: scroll;
 }
 
-.slideshow > input[type="radio"][name="flip"] {}
+.slideshow > input[type="radio"][name="flip"] {
+    position: absolute;
+    width:   50%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+}
 .slideshow > input[type="radio"][name="flip"]:hover { opacity: .4; }
 .slideshow > input[type="radio"][name="flip"]:checked { visibility: hidden; }
 .slideshow > input[type="radio"][name="flip"]:checked ~ input[type="radio"][name="flip"] { visibility: hidden ; left: auto; right: 0; }
