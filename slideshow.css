@@ -1,0 +1,14 @@
+html, body {
+    margin:  0;
+    padding: 0;
+    height:  100%;
+}
+.slideshow,
+.slideshow * {
+    margin:  0;
+    padding: 0;
+    font-size: 100%;
+    -ms-overflow-style:none;
+}
+.slideshow::-webkit-scrollbar,
+.slideshow *::-webkit-scrollbar { display:none; }
