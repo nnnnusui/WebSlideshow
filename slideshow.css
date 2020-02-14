@@ -19,7 +19,7 @@ html, body {
     --slide-width:  calc(var(--height) / 9 * 16);
     --slide-height: 100%;
     --font-size-base: calc(var(--height) * 0.16);
-    --max_page: "xx";
+    --page-count: "";
 
     position: relative;
     width:  var(--slide-width);
@@ -64,3 +64,21 @@ html, body {
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(7):checked ~ section:nth-of-type(7) { visibility: visible; }
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(8):checked ~ section:nth-of-type(8) { visibility: visible; }
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(9):checked ~ section:nth-of-type(9) { visibility: visible; }
+
+.slideshow > .page_counter {
+    --current-page: "0";
+    position: absolute;
+    right:  0;
+    bottom: 0;
+}
+.slideshow > .page_counter::before { content: var(--current-page); }
+.slideshow > .page_counter::after  { content: var(--page-count);   }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(1):checked ~ .page_counter { --current-page: "1"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(2):checked ~ .page_counter { --current-page: "2"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(3):checked ~ .page_counter { --current-page: "3"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(4):checked ~ .page_counter { --current-page: "4"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(5):checked ~ .page_counter { --current-page: "5"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(6):checked ~ .page_counter { --current-page: "6"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(7):checked ~ .page_counter { --current-page: "7"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(8):checked ~ .page_counter { --current-page: "8"; }
+.slideshow > input[type="radio"][name=flip]:nth-of-type(9):checked ~ .page_counter { --current-page: "9"; }
