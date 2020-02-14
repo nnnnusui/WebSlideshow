@@ -12,3 +12,24 @@ html, body {
 }
 .slideshow::-webkit-scrollbar,
 .slideshow *::-webkit-scrollbar { display:none; }
+
+.slideshow {
+    --width:  100vw;
+    --height: 100vh;
+    --slide-width:  calc(var(--height) / 9 * 16);
+    --slide-height: 100%;
+    --font-size-base: calc(var(--height) * 0.16);
+    --max_page: "xx";
+
+    position: relative;
+    width:  var(--slide-width);
+    height: var(--slide-height);
+    font-size: calc(var(--font-size-base) * .4);
+}
+@media (max-aspect-ratio: 16/9){
+    .slideshow {
+        --slide-width:  100%;
+        --slide-height: calc(var(--width) / 16 * 9);
+        --font-size-base: calc(var(--width) * 0.09);
+    }
+}
