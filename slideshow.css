@@ -52,7 +52,7 @@ html, body {
 
 /* page counter */
 .slideshow > section::before,
-.slideshow > section:last-child::after {
+.slideshow > section:last-of-type::after {
     position: absolute;
     right:  0;
     bottom: 0;
@@ -61,7 +61,7 @@ html, body {
     content: counter(current-page);
     margin-right: 1em;
 }
-.slideshow > section:last-child::after {
+.slideshow > section:last-of-type::after {
     visibility: visible;
     content: "/"counter(current-page);
     font-size: 85%;
