@@ -125,3 +125,13 @@ input[type="checkbox"][name="list"]:checked ~ section {
 input[type="checkbox"][name="list"]:checked ~ input { display: none; }
 input[type="checkbox"][name="list"]:checked ~ section input { display: none; }
 input[type="checkbox"][name="list"]:checked ~ section section { visibility: visible; }
+/* page counter add-on */
+input[type="checkbox"][name="list"]:checked ~ section:last-of-type::after { visibility: hidden; }
+input[type="checkbox"][name="list"]:checked ~ section::before {
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -.2em;
+    font-size: 180%;
+}
