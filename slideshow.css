@@ -67,6 +67,7 @@ html, body {
     font-size: 85%;
 }
 
+/* page flip */
 .slideshow > input[type="radio"][name="flip"] {
     position: absolute;
     width:   50%;
@@ -87,6 +88,7 @@ html, body {
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(8):checked ~ section:nth-of-type(7) { visibility: visible; }
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(9):checked ~ section:nth-of-type(8) { visibility: visible; }
 
+/* in page increment */
 .slideshow > section > input { 
     position: absolute;
     right: 0;
