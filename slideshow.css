@@ -46,10 +46,10 @@ html, body {
 }
 .slideshow > .pages > section {
     counter-increment: current-page;
+    visibility: hidden;
     position: absolute;
     width:  100%;
     height: 100%;
-    visibility: hidden;
 }
 
 /* page counter */
@@ -74,12 +74,11 @@ html, body {
     position: absolute;
     width:   50%;
     height: 100%;
-    opacity: 0;
     z-index: 1;
+    opacity: 0;
 }
-.slideshow > input[type="radio"][name="flip"]:hover { opacity: .4; }
 .slideshow > input[type="radio"][name="flip"]:checked { visibility: hidden; }
-.slideshow > input[type="radio"][name="flip"]:checked ~ input[type="radio"][name="flip"] { visibility: hidden ; left: auto; right: 0; }
+.slideshow > input[type="radio"][name="flip"]:checked ~ input[type="radio"][name="flip"] { visibility: hidden ; right: 0; }
 .slideshow > input[type="radio"][name="flip"]:checked + input[type="radio"][name="flip"] { visibility: inherit; }
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(2):checked ~ .pages > section:nth-of-type(1) { visibility: visible; }
 .slideshow > input[type="radio"][name="flip"]:nth-of-type(3):checked ~ .pages > section:nth-of-type(2) { visibility: visible; }
@@ -96,8 +95,8 @@ html, body {
     right: 0;
     width:   50%;
     height: 100%;
-    opacity: 0.2;
     z-index: 1;
+    opacity: 0;
 }
 .slideshow > .pages > section > input:checked { right: auto; }
 .slideshow > .pages > section > input ~ input { visibility: hidden; }
@@ -110,9 +109,9 @@ html, body {
 /* List view */
 .slideshow > input[type="checkbox"][name="list"] {
     position: absolute;
-    z-index: 2;
-    width: 100%;
     bottom: 0;
+    width: 100%;
+    z-index: 2;
 }
 .slideshow > input[type="checkbox"][name="list"]:checked ~ .pages { position: absolute; }
 .slideshow > input[type="checkbox"][name="list"]:checked ~ input[type="radio"][name="flip"],
@@ -137,6 +136,9 @@ html, body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: -.2em;
     font-size: 180%;
 }
+
+/* debug styling */
+.slideshow > input[type="radio"][name="flip"]:hover { opacity: .4; }
+.slideshow > .pages > section > input { opacity: 0.2; }
