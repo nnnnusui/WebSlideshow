@@ -20,7 +20,7 @@ html, body {
     --slide-height: 100%;
     --font-size-base: calc(var(--height) * 0.16);
     --font-size: calc(var(--font-size-base) * .4);
-    --page-count: "";
+    counter-reset: current-page;
 
     position: relative;
     width:  var(--slide-width);
@@ -40,6 +40,7 @@ html, body {
 }
 
 .slideshow > section {
+    counter-increment: current-page;
     position: absolute;
     top:  0;
     left: 0;
@@ -47,6 +48,23 @@ html, body {
     height: 100%;
     overflow: scroll;
     visibility: hidden;
+}
+
+/* page counter */
+.slideshow > section::before,
+.slideshow > section:last-child::after {
+    position: absolute;
+    right:  0;
+    bottom: 0;
+}
+.slideshow > section::before {
+    content: counter(current-page);
+    margin-right: 1em;
+}
+.slideshow > section:last-child::after {
+    visibility: visible;
+    content: "/"counter(current-page);
+    font-size: 85%;
 }
 
 .slideshow > input[type="radio"][name="flip"] {
@@ -80,28 +98,10 @@ html, body {
 .slideshow > section > input:checked { right: auto; }
 .slideshow > section > input ~ input { visibility: hidden; }
 .slideshow > section > input:checked + input { visibility: inherit; }
-
 .slideshow > section > section { visibility: hidden; }
 .slideshow > section > input:nth-of-type(1):checked ~ section:nth-of-type(1) { visibility: inherit; }
 .slideshow > section > input:nth-of-type(2):checked ~ section:nth-of-type(2) { visibility: inherit; }
 .slideshow > section > input:nth-of-type(3):checked ~ section:nth-of-type(3) { visibility: inherit; }
-
-.slideshow > .page_counter {
-    --current-page: "0";
-    position: absolute;
-    right:  0;
-    bottom: 0;
-}
-.slideshow > .page_counter::before { content: var(--current-page); }
-.slideshow > .page_counter::after  { content: var(--page-count);   }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(2):checked ~ .page_counter { --current-page: "1"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(3):checked ~ .page_counter { --current-page: "2"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(4):checked ~ .page_counter { --current-page: "3"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(5):checked ~ .page_counter { --current-page: "4"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(6):checked ~ .page_counter { --current-page: "5"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(7):checked ~ .page_counter { --current-page: "6"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(8):checked ~ .page_counter { --current-page: "7"; }
-.slideshow > input[type="radio"][name="flip"]:nth-of-type(9):checked ~ .page_counter { --current-page: "8"; }
 
 /* List view */
 input[type="checkbox"][name="list"] {
