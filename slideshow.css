@@ -161,5 +161,5 @@ html, body {
     transition-duration: 0.1s;
     transition-property: width, height;
 }
-.slideshow > input:hover { opacity: .4; }
-.slideshow > .pages > section > input { opacity: 0.2; }
+.slideshow > input:hover,
+.slideshow > .pages > section > input:hover { opacity: 0.2; }
