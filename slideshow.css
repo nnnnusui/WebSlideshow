@@ -142,14 +142,17 @@ html, body {
     font-size: 180%;
 }
 
-/* new checkbox */
+/* input invalidation checkbox */
 .slideshow > input:nth-of-type(1) {
     position: absolute;
     right: 0;
     bottom: 0;
     z-index: 3;
 }
-
+.slideshow > input:nth-of-type(1):checked ~ input,
+.slideshow > input:nth-of-type(1):checked ~ .pages input {
+    z-index: -1;
+}
 
 
 
