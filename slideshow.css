@@ -70,7 +70,7 @@ html, body {
 }
 
 /* page flip */
-.slideshow > input[type="radio"][name="flip"] {
+.slideshow > input[type="radio"][name="flip"]:not(:first-child) {
     position: absolute;
     width:   50%;
     height: 100%;
@@ -107,31 +107,31 @@ html, body {
 .slideshow > .pages > section > input:nth-of-type(3):checked ~ section:nth-of-type(3) { visibility: inherit; }
 
 /* List view */
-.slideshow > input[type="checkbox"][name="list"] {
+.slideshow > input:first-of-type {
     position: absolute;
     bottom: 0;
     width: 100%;
     z-index: 2;
 }
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages { position: absolute; }
-.slideshow > input[type="checkbox"][name="list"]:checked ~ input[type="radio"][name="flip"],
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages > section {
+.slideshow > input:first-of-type:checked ~ .pages { position: absolute; }
+.slideshow > input:first-of-type:checked ~ input[type="radio"][name="flip"]:not(:first-child),
+.slideshow > input:first-of-type:checked ~ .pages > section {
     visibility: visible;
     position: relative;
     flex-grow:   0;
     flex-shrink: 0;
-    width:  calc(var(--slide-width)  * .2);
-    height: calc(var(--slide-height) * .2);
-    font-size: calc(var(--font-size) * .2);
-    border: 1px solid;
-    margin: .2em;
+    width:  20%;
+    height: 20%;
+    font-size: 20%;
 }
+.slideshow > input:first-of-type:checked ~ .pages > section                 { margin: .2em; border: .1em solid; }
+.slideshow > input:first-of-type:checked ~ input[type="radio"][name="flip"] { margin: .3em; }
 /* inputs add-on */
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages > section input   { visibility: hidden; }
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages > section section { visibility: visible; }
+.slideshow > input:first-of-type:checked ~ .pages > section input   { visibility: hidden; }
+.slideshow > input:first-of-type:checked ~ .pages > section section { visibility: visible; }
 /* page counter add-on */
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages > section:last-of-type::after { visibility: hidden; }
-.slideshow > input[type="checkbox"][name="list"]:checked ~ .pages > section::before {
+.slideshow > input:first-of-type:checked ~ .pages > section:last-of-type::after { visibility: hidden; }
+.slideshow > input:first-of-type:checked ~ .pages > section::before {
     left: 0;
     width: 100%;
     display: flex;
@@ -140,5 +140,6 @@ html, body {
 }
 
 /* debug styling */
+.slideshow { background-color: antiquewhite; }
 .slideshow > input[type="radio"][name="flip"]:hover { opacity: .4; }
 .slideshow > .pages > section > input { opacity: 0.2; }
