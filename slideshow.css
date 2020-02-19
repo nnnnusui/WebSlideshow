@@ -20,8 +20,6 @@ html, body {
     appearance: none;
     margin:  0;
     padding: 0;
-    font-size: 100%;
-    -ms-overflow-style:none;
 }
 .slideshow::-webkit-scrollbar,
 .slideshow *::-webkit-scrollbar { display:none; }
@@ -123,9 +121,12 @@ html, body {
 /* List view */
 .slideshow > input:nth-of-type(2) {
     position: absolute;
+    right: 0;
     bottom: 0;
-    width: 100%;
-    z-index: 2;
+    z-index: 3;
+    width:  3%;
+    height: 8%;
+    opacity: .1;
 }
 .slideshow > input:nth-of-type(2):checked ~ .pages { position: absolute; }
 .slideshow > input:nth-of-type(2):checked ~ input:nth-of-type(n+3),
@@ -156,11 +157,11 @@ html, body {
 /* input invalidation checkbox */
 .slideshow > input:nth-of-type(1) {
     position: absolute;
-    right: 0;
     bottom: 0;
-    z-index: 3;
+    width: 100%;
+    z-index: 2;
 }
-.slideshow > input:nth-of-type(1):checked ~ input,
+.slideshow > input:nth-of-type(1):checked ~ input:nth-of-type(2):not(:checked) ~ input:nth-of-type(n+3),
 .slideshow > input:nth-of-type(1):checked ~ .pages input {
     z-index: -1;
     opacity:  0;
@@ -173,8 +174,8 @@ html, body {
     transition-duration: 0.1s;
     transition-property: width, height;
 }
-.slideshow > input:hover,
-.slideshow > .pages > section > input:hover { opacity: 0.2; }
+/* .slideshow > input:hover,
+.slideshow > .pages > section > input:hover { opacity: 0.2; } */
 .slideshow > input:nth-of-type(2):checked ~ .pages > section::before {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 25%, rgba(0, 0, 0, 0.35));
 }
