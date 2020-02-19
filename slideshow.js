@@ -5,14 +5,19 @@ let flipInputs;
 
 window.onload = function(){
     const slideshow = document.getElementsByClassName('slideshow')[0];
-    flipInputs
+    const inputs
         = Array.from(slideshow.children)
-            .filter(it=> it.tagName == "INPUT")
-            .filter(it=> it.name    == "flip" )
-            .slice(1);
+            .filter(it=> it.tagName == "INPUT");
+    const flips = inputs.filter(it=> it.name == "flip");
+    const inputInvalidationCheckbox = inputs[0];
+    const listViewButton            = flips[0];
+    flipInputs = flips.slice(1);
     flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) updatePageUrlParameter(index) });
     setPage(getPageUrlParameter());
     
+    if(!isMobile())
+        inputInvalidationCheckbox.checked = true;
+
     document.onkeydown = function(event){
         switch(event.keyCode){
             case keyAllowLeft : slideshowDecrement(); break;
@@ -42,4 +47,7 @@ function updatePageUrlParameter(index){
     const url = new URL(document.location);
     url.searchParams.set("page", index);
     history.replaceState('','',url.href);
+}
+function isMobile(){
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
