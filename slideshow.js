@@ -11,6 +11,8 @@ window.onload = function(){
             .filter(it=> it.name    == "flip" )
             .slice(1);
     flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) updatePageUrlParameter(index) });
+    setPage(getPageUrlParameter());
+    
     document.onkeydown = function(event){
         switch(event.keyCode){
             case keyAllowLeft : slideshowDecrement(); break;
