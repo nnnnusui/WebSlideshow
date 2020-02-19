@@ -7,7 +7,17 @@ html, body {
 
 /* style init */
 .slideshow,
-.slideshow * {
+.slideshow *:not(input) {
+    all: unset;
+    -ms-overflow-style:none;
+    font-family:"メイリオ", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", Osaka, sans-serif;
+}
+.slideshow input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
     margin:  0;
     padding: 0;
     font-size: 100%;
