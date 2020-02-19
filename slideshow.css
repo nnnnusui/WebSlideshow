@@ -83,7 +83,8 @@ html, body {
 }
 
 /* controllers init */
-.slideshow > input { position: absolute; opacity: 0; }
+.slideshow > input,
+.slideshow > .pages > section > input { position: absolute; opacity: 0; }
 /* page flip */
 .slideshow > input:nth-of-type(n+7) {
     width:   50%;
