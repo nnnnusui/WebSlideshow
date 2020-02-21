@@ -3,6 +3,22 @@ const keyAllowLeft  = 37;
 const keyAllowRight = 39;
 let flipInputs;
 
+class PageUrlParameter {
+    get url(){ return new URL(document.location); }
+    get() {
+        const url    = this.url;
+        const gotten = Number(url.searchParams.get("page"));
+        if (gotten) return gotten;
+        return 0;
+    }
+    set(value) {
+        const url = this.url;
+        url.searchParams.set("page", value);
+        history.replaceState('','',url.href);
+    }
+}
+const page = new PageUrlParameter;
+
 window.onload = function(){
     const slideshow = document.getElementsByClassName('slideshow')[0];
     const inputs
@@ -12,8 +28,8 @@ window.onload = function(){
     const inputInvalidationCheckbox = inputs[0];
     const listViewButton            = flips[0];
     flipInputs = flips.slice(1);
-    flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) updatePageUrlParameter(index) });
-    setPage(getPageUrlParameter());
+    flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) page.set(index) });
+    setPage(page.get());
     
     if(!isMobile())
         inputInvalidationCheckbox.checked = true;
@@ -31,26 +47,13 @@ window.onload = function(){
 }
 
 // TODO: in page fli@
-function slideshowDecrement(){ setPage(getPageUrlParameter() -1); }
-function slideshowIncrement(){ setPage(getPageUrlParameter() +1); }
+function slideshowDecrement(){ setPage(page.get() - 1); }
+function slideshowIncrement(){ setPage(page.get() +1); }
 function setPage(index){
     const target = flipInputs[index];
     if(!target) return;
     target.checked = true;
-    updatePageUrlParameter(index);
-}
-
-function getPageUrlParameter(){
-    const url    = new URL(document.location);
-    const gotten = Number(url.searchParams.get("page"));
-    if (gotten) return gotten;
-    updatePageUrlParameter(0);
-    return 0;
-}
-function updatePageUrlParameter(index){
-    const url = new URL(document.location);
-    url.searchParams.set("page", index);
-    history.replaceState('','',url.href);
+    page.set(index);
 }
 function isMobile(){
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -67,7 +70,7 @@ function hostingSession(id){
     sessionController.searchParams.set("id"    , id   );
     flipInputs.forEach((it, index)=> it.onchange = value=> {
         if(!value) return;
-        updatePageUrlParameter(index)
+        page.set(index)
         sessionController.searchParams.set("page", index);
         fetch(sessionController);
         console.log(".");
