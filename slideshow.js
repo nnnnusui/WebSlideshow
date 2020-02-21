@@ -3,23 +3,32 @@ const keyAllowLeft  = 37;
 const keyAllowRight = 39;
 let flipInputs;
 
-class PageUrlParameter {
-    get url(){ return new URL(document.location); }
-    get() {
-        const url    = this.url;
-        const gotten = Number(url.searchParams.get("page"));
-        if (gotten) return gotten;
-        return 0;
+class DocumentUrlParameterListener{
+    constructor(name, onGet = (it)=> it){
+        this.url = new URL(document.location);
+        this.name = name;
+        this.onGet = onGet;
+        this.listeners = [];
     }
-    set(value) {
-        const url = this.url;
-        url.searchParams.set("page", value);
-        history.replaceState('','',url.href);
+    get(){
+        return this.onGet(this.url.searchParams.get(this.name));
+    }
+    set(value){
+        this.url.searchParams.set(this.name, value);
+        history.replaceState('','', this.url.href);
+        if("set" in this.listeners)
+            this.listeners["set"].forEach(it=> it(value, this.url));
+    }
+    addOnSet(func){
+        if(!("set" in this.listeners))
+            this.listeners["set"] = [];
+        this.listeners["set"].push(func);
     }
 }
-const page = new PageUrlParameter;
+const page = new DocumentUrlParameterListener("page", it=> Number(it) || 0);
 
 window.onload = function(){
+    page.addOnSet( value=> console.log(value) );
     const slideshow = document.getElementsByClassName('slideshow')[0];
     const inputs
         = Array.from(slideshow.children)
