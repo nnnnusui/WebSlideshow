@@ -9,6 +9,7 @@ class DocumentUrlParameterListener{
         this.name = name;
         this.onGet = onGet;
         this.listeners = [];
+        this.listeners["set"] = [];
     }
     get(){
         return this.onGet(this.url.searchParams.get(this.name));
@@ -20,12 +21,11 @@ class DocumentUrlParameterListener{
             this.listeners["set"].forEach(it=> it(value, this.url));
     }
     addOnSet(func){
-        if(!("set" in this.listeners))
-            this.listeners["set"] = [];
         this.listeners["set"].push(func);
     }
 }
-const page = new DocumentUrlParameterListener("page", it=> Number(it) || 0);
+const page    = new DocumentUrlParameterListener("page", it=> Number(it) || 0);
+const session = new DocumentUrlParameterListener("session");
 
 window.onload = function(){
     page.addOnSet( value=> console.log(value) );
@@ -50,13 +50,13 @@ window.onload = function(){
         }
     };
 
-    const sessionId = getSessionUrlParameter();
+    const sessionId = session.get();
     if(sessionId)
         joinToSession(sessionId);
 }
 
 // TODO: in page fli@
-function slideshowDecrement(){ setPage(page.get() - 1); }
+function slideshowDecrement(){ setPage(page.get() -1); }
 function slideshowIncrement(){ setPage(page.get() +1); }
 function setPage(index){
     const target = flipInputs[index];
@@ -89,7 +89,7 @@ function getSessionId() {
     fetch(sessionController)
         .then(function(response) { return response.json(); })
         .then(function(json) {
-            setSessionUrlParameter(json.id);
+            session.set(json.id);
             hostingSession(json.id);
         });
 }
@@ -108,13 +108,4 @@ function syncPage(){
             setPage(json.page);
             setTimeout(()=> { syncPage(); }, 750);
         });
-}
-function getSessionUrlParameter(){
-    const url = new URL(document.location);
-    return url.searchParams.get("session");
-}
-function setSessionUrlParameter(id){
-    const url = new URL(document.location);
-    url.searchParams.set("session", id);
-    history.replaceState('','',url.href);
 }
