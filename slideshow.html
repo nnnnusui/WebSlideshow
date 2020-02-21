@@ -9,7 +9,7 @@
 </head>
 <body>
 <form class="slideshow">
-    <input type="checkbox">
+    <input type="checkbox" name="listview">
     <input type="checkbox">
     <input type="checkbox">
     <input type="checkbox">
@@ -21,27 +21,29 @@
     <input type="radio" name="flip">
     <input type="radio" name="flip">
     <input type="radio" name="flip">
+    <input type="button" name="sessionToggler" onclick="getSessionId();" style="opacity: 1; background-color: rgba(255, 255, 255, 0.5);">
     <div class="pages">
         <section>
-            <input type="checkbox">
-            <input type="checkbox">
-            <input type="checkbox">
-            <h1>Title</h1>
-            <section>one</section>
-            <section>two</section>
-            <section>three</section>
+            <header>
+                <h1>Slideshow</h1>
+                <p>Web slideshow template</p>
+            </header>
         </section>
         <section>
-            <input type="checkbox">
-            <input type="checkbox">
-            <input type="checkbox">
             <h1>Page1</h1>
-            <section>2one</section>
-            <section>2two</section>
-            <section>2three</section>
+            <p>
+                p tag.
+                sample texts.
+            </p>
         </section>
         <section>
+            <input type="checkbox">
+            <input type="checkbox">
+            <input type="checkbox">
             <h1>Page2</h1>
+            <section>inc one</section>
+            <section>inc two</section>
+            <section>inc three</section>
         </section>
         <section>
             <h1>Page3</h1>
