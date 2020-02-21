@@ -11,10 +11,10 @@ class DocumentUrlParameterListener{
         this.listeners = [];
         this.listeners["set"] = [];
     }
-    get(){
+    get value(){
         return this.onGet(this.url.searchParams.get(this.name));
     }
-    set(value){
+    set value(value){
         this.url.searchParams.set(this.name, value);
         history.replaceState('','', this.url.href);
         if("set" in this.listeners)
@@ -37,8 +37,8 @@ window.onload = function(){
     const inputInvalidationCheckbox = inputs[0];
     const listViewButton            = flips[0];
     flipInputs = flips.slice(1);
-    flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) page.set(index) });
-    setPage(page.get());
+    flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) page.value = index; });
+    setPage(page.value);
     
     if(!isMobile())
         inputInvalidationCheckbox.checked = true;
@@ -50,19 +50,19 @@ window.onload = function(){
         }
     };
 
-    const sessionId = session.get();
+    const sessionId = session.value;
     if(sessionId)
         joinToSession(sessionId);
 }
 
 // TODO: in page fli@
-function slideshowDecrement(){ setPage(page.get() -1); }
-function slideshowIncrement(){ setPage(page.get() +1); }
+function slideshowDecrement(){ setPage(page.value -1); }
+function slideshowIncrement(){ setPage(page.value +1); }
 function setPage(index){
     const target = flipInputs[index];
     if(!target) return;
     target.checked = true;
-    page.set(index);
+    page.value = index;
 }
 function isMobile(){
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -77,19 +77,16 @@ function hostingSession(id){
     console.log("id: "+ id);
     sessionController.searchParams.set("action", "set");
     sessionController.searchParams.set("id"    , id   );
-    flipInputs.forEach((it, index)=> it.onchange = value=> {
-        if(!value) return;
-        page.set(index)
+    page.addOnSet(value=>{
         sessionController.searchParams.set("page", index);
         fetch(sessionController);
-        console.log(".");
     });
 }
 function getSessionId() {
     fetch(sessionController)
         .then(function(response) { return response.json(); })
         .then(function(json) {
-            session.set(json.id);
+            session.value = json.id;
             hostingSession(json.id);
         });
 }
