@@ -78,7 +78,7 @@ function hostingSession(id){
     sessionController.searchParams.set("action", "set");
     sessionController.searchParams.set("id"    , id   );
     page.addOnSet(value=>{
-        sessionController.searchParams.set("page", index);
+        sessionController.searchParams.set("page", value);
         fetch(sessionController);
     });
 }
@@ -103,6 +103,6 @@ function syncPage(){
         .then(function(response) { return response.json(); })
         .then(function(json) {
             setPage(json.page);
-            setTimeout(()=> { syncPage(); }, 750);
+            setTimeout(()=> { syncPage(); }, 100);
         });
 }
