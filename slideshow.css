@@ -4,6 +4,7 @@ html, body {
     padding: 0;
     height:  100%;
 }
+body::-webkit-scrollbar { display:none; }
 
 /* style init */
 .slideshow,
@@ -120,7 +121,7 @@ html, body {
 
 /* List view */
 .slideshow > input:nth-of-type(6) {
-    right: 0;
+    right:  0;
     bottom: 0;
     z-index: 3;
     width:  3%;
@@ -167,12 +168,13 @@ html, body {
 
 
 /* debug&test styling */
-.slideshow * {
-    transition-duration: 0.1s;
+.slideshow section {
+    transition-duration: .1s;
+    transition-timing-function: ease;
     transition-property: width, height;
 }
 /* .slideshow > input:hover,
 .slideshow > .pages > section > input:hover { opacity: 0.2; } */
-.slideshow > input:nth-of-type(2):checked ~ .pages > section::before {
+/* .slideshow > input:nth-of-type(2):checked ~ .pages > section::before {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 25%, rgba(0, 0, 0, 0.35));
-}
+} */
