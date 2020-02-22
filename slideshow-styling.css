@@ -1,0 +1,25 @@
+.slideshow {
+    --em-per: .5;
+    
+    --base-r: 58;
+    --base-g: 56;
+    --base-b: 57;
+    --base-color: rgb(var(--base-r), var(--base-g), var(--base-b));
+    background-color: var(--base-color);
+    color: #FFFFFF;
+}
+body,
+.slideshow > .pages > section:first-of-type,
+.slideshow > .pages > section:first-of-type > header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.slideshow > .pages > section {
+    display: flex;
+    flex-direction: column;
+}
+.slideshow > .pages > section:first-of-type h1 { font-size: 370%; line-height: 1.2em; }
+.slideshow > .pages > section h1 { font-size: 250%; }
