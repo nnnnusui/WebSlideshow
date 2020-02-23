@@ -4,44 +4,127 @@ const keyAllowRight = 39;
 let flipInputs;
 
 class DocumentUrlParameterListener{
-    constructor(name, onGet = (it)=> it){
-        this.url = new URL(document.location);
+    get url(){ return new URL(document.location); }
+    constructor(name, onGet = it=> it, judgeInvalid = it=> false){
         this.name = name;
         this.onGet = onGet;
+        this.judgeInvalid = judgeInvalid;
         this.listeners = [];
         this.listeners["set"] = [];
     }
-    get value(){
-        return this.onGet(this.url.searchParams.get(this.name));
-    }
+    get value(){ return this.onGet(this.url.searchParams.get(this.name)); }
     set value(value){
-        this.url.searchParams.set(this.name, value);
-        history.replaceState('','', this.url.href);
+        if(this.judgeInvalid(value)) return;
+        const url = this.url;
+        url.searchParams.set(this.name, value);
+        history.replaceState('','', url.href);
         if("set" in this.listeners)
-            this.listeners["set"].forEach(it=> it(value, this.url));
+            this.listeners["set"].forEach(it=> it(value, url));
     }
-    addOnSet(func){
-        this.listeners["set"].push(func);
+    reload(){ this.value = this.value; }
+    addOnSet(func){ this.listeners["set"].push(func); }
+    removeOnSet(func){
+        this.listeners["set"]
+            .filter(it=> it === func)
+            .forEach((it, index)=> this.listeners["set"].splice(index, 1));
+    }
+    clean(){
+        const url = this.url;
+        url.searchParams.delete(this.name);
+        history.replaceState('','', url.href);
     }
 }
-const page    = new DocumentUrlParameterListener("page", it=> Number(it) || 0);
-const session = new DocumentUrlParameterListener("session");
+const page
+    = new DocumentUrlParameterListener(
+        "page"
+       ,it=> {
+        const number = Number(it);
+        return number == null ? 1 : number
+      },it=> {
+        return it < 0
+            || it >= flipInputs.length;
+    });
+
+class SessionController {
+    static get url(){ return new URL("https://script.google.com/macros/s/AKfycbxE1H5XIwMf8YL25ail4TBgfp-uu77VDJSVE7aahS_KEtsepMo/exec"); }
+    constructor(){
+        this.id = new DocumentUrlParameterListener("sessionId");
+        this.isAlive  = false;
+        this.syncPageFunc = null;
+    }
+    toggle(id){
+        this.isAlive = !this.isAlive;
+        if(this.isAlive){
+            if(!this.id.value){
+                SessionController.promisedId().then(it=>{
+                    this.id.value = it;
+                    this.hostingSession();
+                });
+            }else{
+                this.joinToSession();
+            }
+        }else{
+            console.log("connection closed.");
+            this.id.clean();
+            page.removeOnSet(this.syncPageFunc);
+        }
+    }
+    static promisedId() {
+        return fetch(SessionController.url)
+                .then(response  => response.json())
+                .then(json      => json.id);
+    }
+    hostingSession(){
+        console.log("start Hosting...");
+        console.log("id: "+ this.id.value);
+        const url = SessionController.url;
+        url.searchParams.set("action", "set");
+        url.searchParams.set("id"    , this.id.value);
+        this.syncPageFunc = page=> this.setPage(url, page)
+        page.addOnSet(this.syncPageFunc);
+    }
+    setPage(url, value){
+        url.searchParams.set("page", value);
+        fetch(url);
+    }
+    joinToSession(){
+        const url = SessionController.url;
+        console.log("join to session.");
+        console.log("id: "+ this.id.value);
+        url.searchParams.set("action", "get");
+        url.searchParams.set("id"    , this.id.value);
+        this.pageSyncing();
+    }
+    pageSyncing(){
+        if(!this.isAlive) return;
+        console.log(".");
+        const url = SessionController.url;
+        url.searchParams.set("id", this.id.value);
+        fetch(url)
+            .then(response  => response.json())
+            .then(json=>{
+                page.value = json.page;
+                setTimeout(()=> this.pageSyncing(), 100);
+            });
+    }
+}
+
 
 window.onload = function(){
-    page.addOnSet( value=> console.log(value) );
     const slideshow = document.getElementsByClassName('slideshow')[0];
     const inputs
         = Array.from(slideshow.children)
             .filter(it=> it.tagName == "INPUT");
-    const flips = inputs.filter(it=> it.name == "flip");
+    flipInputs = inputs.filter(it=> it.name == "flip");
     const inputInvalidationCheckbox = inputs[0];
-    const listViewButton            = flips[0];
-    flipInputs = flips.slice(1);
+    const listViewButton            = flipInputs[0];
+
     flipInputs.forEach((it, index)=> it.onchange = value=> { if(value) page.value = index; });
-    setPage(page.value);
+    page.addOnSet( it=> flipInputs[it].checked = true );
+    page.reload();
     
-    if(!isMobile())
-        inputInvalidationCheckbox.checked = true;
+    // if(!isMobile())
+    //     inputInvalidationCheckbox.checked = true;
 
     document.onkeydown = function(event){
         switch(event.keyCode){
@@ -50,59 +133,16 @@ window.onload = function(){
         }
     };
 
-    const sessionId = session.value;
-    if(sessionId)
-        joinToSession(sessionId);
+    const sessionController = new SessionController();
+    if(!!sessionController.id.value)
+        sessionController.toggle();
+    inputs.filter(it=> it.name == "sessionToggler")[0].onclick = ()=> sessionController.toggle();
 }
 
 // TODO: in page fli@
-function slideshowDecrement(){ setPage(page.value -1); }
-function slideshowIncrement(){ setPage(page.value +1); }
-function setPage(index){
-    const target = flipInputs[index];
-    if(!target) return;
-    target.checked = true;
-    page.value = index;
-}
+function slideshowDecrement(){ page.value = page.value -1; }
+function slideshowIncrement(){ page.value = page.value +1; }
 function isMobile(){
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-
-
-// get session js
-const sessionController = new URL("https://script.google.com/macros/s/AKfycbxE1H5XIwMf8YL25ail4TBgfp-uu77VDJSVE7aahS_KEtsepMo/exec");
-function hostingSession(id){
-    console.log("start Hosting...");
-    console.log("id: "+ id);
-    sessionController.searchParams.set("action", "set");
-    sessionController.searchParams.set("id"    , id   );
-    page.addOnSet(value=>{
-        sessionController.searchParams.set("page", value);
-        fetch(sessionController);
-    });
-}
-function getSessionId() {
-    fetch(sessionController)
-        .then(function(response) { return response.json(); })
-        .then(function(json) {
-            session.value = json.id;
-            hostingSession(json.id);
-        });
-}
-function joinToSession(id){
-    console.log("join to session.");
-    console.log("id: "+ id);
-    sessionController.searchParams.set("action", "get");
-    sessionController.searchParams.set("id"    , id   );
-    syncPage();
-}
-function syncPage(){
-    console.log(".");
-    fetch(sessionController)
-        .then(function(response) { return response.json(); })
-        .then(function(json) {
-            setPage(json.page);
-            setTimeout(()=> { syncPage(); }, 100);
-        });
-}
