@@ -38,8 +38,8 @@ const page
     = new DocumentUrlParameterListener(
         "page"
        ,it=> {
-        const number = Number(it);
-        return number == null ? 1 : number
+        if(it == null) return 1;
+        return Number(it);
       },it=> {
         return it < 0
             || it >= flipInputs.length;
