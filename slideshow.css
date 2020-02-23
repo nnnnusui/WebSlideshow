@@ -119,6 +119,13 @@ body::-webkit-scrollbar { display:none; }
 .slideshow > .pages > section > input:nth-of-type(2):checked ~ section:nth-of-type(2) { visibility: inherit; }
 .slideshow > .pages > section > input:nth-of-type(3):checked ~ section:nth-of-type(3) { visibility: inherit; }
 
+/* connect to session button */
+.slideshow > input[name="sessionToggler"]{
+    display: none;
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 /* List view */
 .slideshow > input:nth-of-type(6) {
     right:  0;
@@ -152,6 +159,8 @@ body::-webkit-scrollbar { display:none; }
     justify-content: center;
     font-size: 180%;
 }
+/* button add-on */
+.slideshow > input:nth-of-type(6):checked ~ input[name="sessionToggler"]{ display: inline; }
 
 /* input invalidation checkbox */
 .slideshow > input:nth-of-type(1) {
@@ -164,7 +173,6 @@ body::-webkit-scrollbar { display:none; }
 .slideshow > input:nth-of-type(1):checked ~ .pages input {
     z-index: -1;
 }
-
 
 
 /* debug&test styling */
